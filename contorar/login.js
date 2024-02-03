@@ -1,26 +1,26 @@
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-import User from "../database/mongo_schemar"
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt"
+import User from "../database/mongo_schemar.js"
 
 async function Login(req, res) {
     try {
-      const { username, password, } = req.body;
+      const { email, password, } = req.body;
   
-      const user = await User.findOne({ username });
+      const user = await User.findOne({ email });
   
       if (!user) {
-        return res.status(400).send('User not found');
+        return res.status(404).send('User not found');
       }
   
       const isValidPassword = await bcrypt.compare(password, user.password);
   
       if (!isValidPassword) {
-        return res.status(400).send('Invalid password');
+        return res.status(401).send('Invalid password');
       }
   
-      const token = jwt.sign({ username }, 'secretkey', { expiresIn: '1h' });
+      const token = jwt.sign({ email, name: user.name }, 'secretkey', { expiresIn: '1h' });
   
-      res.json({ token });
+      res.status(200).json({ token });
     } catch (error) {
       console.log(error);
       res.status(500).send('Error logging in user');

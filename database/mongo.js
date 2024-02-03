@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 function mongodb() {
-  const mongoURI = "";
+  
+  const mongoURI = ``;
   mongoose
     .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
