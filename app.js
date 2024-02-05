@@ -13,6 +13,10 @@ app.use(cors())
 app.use(bodyParser.json());
 mongodb();
 
+app.get("/", (req, res) => {
+    res.send("Hello From Server")
+})
+
 app.post('/api/register', Register);
 
 app.post('/api/login', Login);
