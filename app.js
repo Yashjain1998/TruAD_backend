@@ -1,7 +1,7 @@
 import express from "express"
 import bodyParser from "body-parser"
-import Login from './contorar/login.js';
-import Register from './contorar/register.js';
+import Login from './controller/login.js';
+import Register from './controller/register.js';
 import mongodb from './database/mongo.js'
 import cors from "cors"
 import fileUpload from 'express-fileupload';
@@ -12,6 +12,7 @@ import Video from "./database/mongo_schema_video.js"
 import ivideoClip from './controller/ivideoclip.js';
 import Media from "./database/mongo_schema_media.js"
 import mongoose from 'mongoose';
+import VideoClip from "./controller/videoclip.js";
 
 
 
