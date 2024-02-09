@@ -19,7 +19,7 @@ const S3 = new aws.S3()
 
 
 export default async function ivideoClip(file, clipDuration, id) {
-  const outPutPath="G:/TruAd Internship/backendAuth/videoCutter/clipvideo/video"
+  const outPutPath="G:/TruAd Internship/backendAuth/TruAD_backend/video"
   // const finalOutputPath=outPutPath.replace(/\\/g, "/");
 
   const uploadPath = path.join(__dirname, "../video", file.name);

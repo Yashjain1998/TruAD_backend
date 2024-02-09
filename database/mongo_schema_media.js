@@ -26,7 +26,7 @@ const MediaSchema = mongoose.Schema({
         required: true
     },
     releaseDate: {
-        type: Number,
+        type: String,
         required: true
     },
     noOfEpisodes: {

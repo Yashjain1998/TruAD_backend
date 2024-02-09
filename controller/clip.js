@@ -25,7 +25,7 @@ export async function createVideoClip(
     id
   ) {
 
-    console.log("iiiid: ", id)
+    // console.log("iiiid: ", id)
     ffmpeg.setFfmpegPath("c:/Users/Aniket/Downloads/ffmpeg/ffmpeg-2024-02-01-git-94422871fc-full_build/bin/ffmpeg.exe");
     ffmpeg.setFfprobePath("c:/Users/Aniket/Downloads/ffmpeg/ffmpeg-2024-02-01-git-94422871fc-full_build/bin/ffprobe.exe");
     ffmpeg.setFfprobePath("c:/Users/Aniket/Downloads/ffmpeg/ffmpeg-2024-02-01-git-94422871fc-full_build/bin/ffplay.exe");

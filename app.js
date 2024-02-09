@@ -51,7 +51,7 @@ app.post("/add-media", async(req, res) => {
     const file = req.files.video
     const clipDuration=Number(req.body.clipsDur)
 
-    console.log(data);
+    // console.log(data);
 
     
     const newMedia = new Media({
@@ -75,11 +75,17 @@ app.post("/add-media", async(req, res) => {
     
     // const existingMedia = await Media.findOne({_id: saveData.id})
 
+    const locations = await Video.find({media : saveData.id})
+
+    console.log("locations :", locations)
+
     const id = new ObjectId(saveData.id)
 
     const updated = await Media.findOneAndUpdate(
         { _id: id },
-        { mediaLocation: vidData.mediaLocation }
+        { mediaLocation: vidData.mediaLocation,
+          availableAdClips: locations.length
+        }
     );
 
 
@@ -135,6 +141,7 @@ app.post("/get-clips", async (req, res) => {
 
     res.status(200).json({locations})
 })
+
 
 export default app;
 

@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 
 export default async function VideoClip(req, res) {
-  const outPutPath="G:/TruAd Internship/backendAuth/videoCutter/clipvideo/video"
+  const outPutPath="G:/TruAd Internship/backendAuth/TruAD_backend/video"
   // const finalOutputPath=outPutPath.replace(/\\/g, "/");
   const clipDuration=Number(req.body.clipsDur)
   const file =  req.files.video;
