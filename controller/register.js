@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import User from "../database/mongo_schemar.js";
-import Token from "../database/mongo_schema_token.js"
+import Token from "../database/mongo_schema_token.js";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import { generateRandomToken } from "../utils/index.js";
@@ -21,22 +21,12 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// let transporter = nodemailer.createTransport({
-//   host: 'mail.truad.co', // Replace with your actual SMTP host
-//   port: 465, // or 465 (usually 587 for STARTTLS, 465 for SSL)
-//   secure: true, // true for 465, false for other ports
-//   auth: {
-//       user: 'noreply@truad.co', // your email address
-//       pass: 'RIF7R-u$0Gg[' // your email password
-//   }
-// });
-
-
 async function Register(req, res) {
   try {
     const { name, password, email } = req.body;
 
-    const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+    const passwordRegex =
+      /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
     if (!passwordRegex.test(password)) {
       return res.status(400).json({
         message:
@@ -62,7 +52,6 @@ async function Register(req, res) {
       isVerified: false,
     });
 
-
     await newUser.save();
 
     const newToken = new Token({
@@ -70,11 +59,13 @@ async function Register(req, res) {
       user: newUser._id,
     });
 
-    await newToken.save()
-    
+    await newToken.save();
+
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-    const confirmationLink = `http://${req.get("host")}/api/confirm?token=${token}`;
+    const confirmationLink = `http://${req.get(
+      "host"
+    )}/api/confirm?token=${token}`;
 
     const compiledFunction = pug.compileFile(
       path.resolve(__dirname, "..", "views", "emailTemplate.pug")
@@ -101,10 +92,9 @@ async function Register(req, res) {
     });
 
     // res.status(200).send('Success');
-
   } catch (error) {
     console.log(error);
-    res.status(500).send('Error registering user');
+    res.status(500).send("Error registering user");
   }
 }
 
