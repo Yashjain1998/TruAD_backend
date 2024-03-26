@@ -86,7 +86,7 @@ async function Register(req, res) {
 
     const mailOptions = {
       from: "noreply@truad.co",
-      to: "aniket.mukherjee@truad.co",
+      to: email,
       subject: "Welcome to TruAD",
       html: html,
     };
