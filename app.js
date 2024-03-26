@@ -1,6 +1,7 @@
 import express from "express"
 import bodyParser from "body-parser"
 import Login from './controller/login.js';
+import Confirm from "./controller/confirm.js";
 import Register from './controller/register.js';
 import mongodb from './database/mongo.js'
 import cors from "cors"
@@ -43,6 +44,8 @@ app.get("/", (req, res) => {
 app.post('/api/register', Register);
 
 app.post('/api/login', Login);
+
+app.get('/api/confirm', Confirm);
 
 app.post('/api/videoclip', VideoClip);
 
