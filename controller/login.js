@@ -17,6 +17,10 @@ async function Login(req, res) {
       if (!isValidPassword) {
         return res.status(401).send('Invalid password');
       }
+
+      if(!user.isVerified){
+        return res.status(403).json({message: "Email not verified"})
+      }
   
       const token = jwt.sign({ email, name: user.name }, 'secretkey', { expiresIn: '1h' });
   

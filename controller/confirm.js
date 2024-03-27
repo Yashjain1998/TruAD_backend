@@ -1,5 +1,5 @@
-import User from "../database/mongo_schemar.js"
-import Token from "../database/mongo_schema_token.js"
+import User from "../database/mongo_schemar.js";
+import Token from "../database/mongo_schema_token.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import pug from "pug";
@@ -31,6 +31,7 @@ async function Confirm(req, res) {
 
     const html = compileFunction();
 
+    // Send the HTML response
     res.send(html);
   } catch (error) {
     console.log(error);
