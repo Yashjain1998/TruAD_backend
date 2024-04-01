@@ -43,7 +43,7 @@ const ForgotPassword = async(req, res) => {
     await newOTP.save()
 
     const mailOptions = {
-        from: "aniketmukherjee5@gmail.com",
+        from: "noreply@truad.co",
         to: email,
         subject: "OTP for Password Regenaration",
         text: `Please use the following OTP to regenerate the passoword for your Aniket Corp account: ${otp}. Please do not share the otp with anyone`
