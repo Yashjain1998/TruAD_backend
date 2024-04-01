@@ -3,16 +3,26 @@ import { generateRandomOTP } from "../utils/index.js"
 import OTP from "../database/mongo_schema_OTP.js"
 import nodemailer from "nodemailer";
 
-const transporter = nodemailer.createTransport({
-    service: "Gmail",
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+// const transporter = nodemailer.createTransport({
+//     service: "Gmail",
+//     host: "smtp.gmail.com",
+//     port: 465,
+//     secure: true,
+//     auth: {
+//       user: "aniketmukherjee5@gmail.com",
+//       pass: process.env.MAILER_KEY,
+//     },
+// });  
+
+let transporter = nodemailer.createTransport({
+    host: 'mail.truad.co', // Replace with your actual SMTP host
+    port: 465, // or 465 (usually 587 for STARTTLS, 465 for SSL)
+    secure: true, // true for 465, false for other ports
     auth: {
-      user: "aniketmukherjee5@gmail.com",
-      pass: process.env.MAILER_KEY,
-    },
-});  
+        user: 'noreply@truad.co', // your email address
+        pass: process.env.TRUAD_MAILER // your email password
+    }
+  });
 
 const ForgotPassword = async(req, res) => {
     const {email} = req.body
