@@ -3,6 +3,8 @@ import bodyParser from "body-parser"
 import Login from './controller/login.js';
 import Confirm from "./controller/confirm.js";
 import Register from './controller/register.js';
+import VerifyOTP from "./controller/verifyOTP.js";
+import verifyToken from "./middleware/verifyToken.js";
 import mongodb from './database/mongo.js'
 import cors from "cors"
 import fileUpload from 'express-fileupload';
@@ -14,6 +16,8 @@ import ivideoClip from './controller/ivideoclip.js';
 import Media from "./database/mongo_schema_media.js"
 import mongoose from 'mongoose';
 import VideoClip from "./controller/videoclip.js";
+import ForgotPassword from "./controller/forgotPassword.js";
+import ResetPassword from "./controller/resetPassword.js";
 
 
 
@@ -46,6 +50,12 @@ app.post('/api/register', Register);
 app.post('/api/login', Login);
 
 app.get('/api/confirm', Confirm);
+
+app.post("/api/forgot", ForgotPassword)
+
+app.post("/verifyOtp", VerifyOTP)
+
+app.post("/resetPassword", verifyToken, ResetPassword)
 
 app.post('/api/videoclip', VideoClip);
 
