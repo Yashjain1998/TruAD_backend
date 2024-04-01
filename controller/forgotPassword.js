@@ -46,7 +46,7 @@ const ForgotPassword = async(req, res) => {
         from: "noreply@truad.co",
         to: email,
         subject: "OTP for Password Regenaration",
-        text: `Please use the following OTP to regenerate the passoword for your Aniket Corp account: ${otp}. Please do not share the otp with anyone`
+        text: `Please use the following OTP to regenerate the passoword for your TruAd account: ${otp}. Please do not share the otp with anyone`
       };
   
       transporter.sendMail(mailOptions, (error, info) => {
