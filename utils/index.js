@@ -11,3 +11,7 @@ export function generateRandomToken() {
         });
     });
 }
+
+export function generateRandomOTP() {
+    return Math.floor(Math.random() * 900000 + 100000);
+  }
