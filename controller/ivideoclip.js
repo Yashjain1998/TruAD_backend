@@ -39,7 +39,6 @@ export default async function ivideoClip(file, clipDuration, id) {
 
 
   const locations = await makeclip(uploadPath, outputPath, clipDuration, id);
-  console.log("videoClip create successfully!", locations);
   fs.unlinkSync(outputPath);
 //   res.status(200).json({locations : locations})
 return {locations, mediaLocation}
@@ -55,10 +54,8 @@ async function uploadClip(outputPath) {
   
     try {
       const data = await S3.upload(params).promise(); // Await the upload operation
-      console.log("Upload to S3 successful", data);
       return data.Location
     } catch (err) {
-      console.error("Error uploading to S3:", err);
       throw err; // Rethrow the error to be handled by the caller
     }
     // } finally {
@@ -69,7 +66,6 @@ async function uploadClip(outputPath) {
 async function makeclip(sourcePath, outputPath, clipDuration, id) {
 
   const videoduration = await getVideoDuration(sourcePath);
-  console.log("video duraton--->"+ videoduration);
   const outputDir = path.dirname(outputPath); // Get the directory of the sourcePath
   const originalFileName = path.basename(sourcePath, path.extname(outputPath)); // Get the file name without extension
   const fileExtension = path.extname(outputPath);

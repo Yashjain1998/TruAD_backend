@@ -29,7 +29,6 @@ export default async function VideoClip(req, res) {
 
 
   const locations = await makeclip(uploadPath, outputPath, clipDuration);
-  console.log("videoClip create successfully!", locations);
   fs.unlinkSync(outputPath);
   res.status(200).json({locations : locations})
 }
@@ -37,7 +36,6 @@ export default async function VideoClip(req, res) {
 async function makeclip(sourcePath, outputPath, clipDuration) {
 
   const videoduration = await getVideoDuration(sourcePath);
-  console.log("video duraton--->"+ videoduration);
   const outputDir = path.dirname(outputPath); // Get the directory of the sourcePath
   const originalFileName = path.basename(sourcePath, path.extname(outputPath)); // Get the file name without extension
   const fileExtension = path.extname(outputPath);

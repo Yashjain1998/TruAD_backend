@@ -14,7 +14,6 @@ region: process.env.REGION
 
 const S3 = new aws.S3()
 
-console.log("test");
 
 // Function to create a video clip
 export async function createVideoClip(
@@ -25,7 +24,6 @@ export async function createVideoClip(
     id
   ) {
 
-    // console.log("iiiid: ", id)
     ffmpeg.setFfmpegPath("c:/Users/Aniket/Downloads/ffmpeg/ffmpeg-2024-02-01-git-94422871fc-full_build/bin/ffmpeg.exe");
     ffmpeg.setFfprobePath("c:/Users/Aniket/Downloads/ffmpeg/ffmpeg-2024-02-01-git-94422871fc-full_build/bin/ffprobe.exe");
     ffmpeg.setFfprobePath("c:/Users/Aniket/Downloads/ffmpeg/ffmpeg-2024-02-01-git-94422871fc-full_build/bin/ffplay.exe");
@@ -67,10 +65,8 @@ export async function createVideoClip(
   
     try {
       const data = await S3.upload(params).promise(); // Await the upload operation
-      console.log("Upload to S3 successful", data);
       return data.Location
     } catch (err) {
-      console.error("Error uploading to S3:", err);
       throw err; // Rethrow the error to be handled by the caller
     } finally {
       fs.unlinkSync(outputPath);

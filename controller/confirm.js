@@ -1,4 +1,4 @@
-import User from "../database/mongo_schemar.js";
+import User from "../database/mongo_schema.js";
 import Token from "../database/mongo_schema_token.js";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -34,7 +34,6 @@ async function Confirm(req, res) {
     // Send the HTML response
     res.send(html);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ message: "Issue with server" });
   }
 }
