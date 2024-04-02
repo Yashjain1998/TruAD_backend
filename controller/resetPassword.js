@@ -1,4 +1,4 @@
-import User from "../database/mongo_schemar.js"
+import User from "../database/mongo_schema.js"
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcrypt'
@@ -6,24 +6,8 @@ import bcrypt from 'bcrypt'
 dotenv.config()
 
 async function ResetPassword(req, res) {
-    const token = req.token;
     const { newPassword } = req.body
-    const verifyToken = () => {
-        return new Promise((resolve, reject) => {
-            jwt.verify(token, process.env.SECRET, (err, data) => {
-                if(err){
-                    reject(err)
-                } else{
-                    resolve(data)
-                }
-            })
-        })
-    }
-
-    const data = await verifyToken()
-
-    const email = data.email;
-
+    const email=req.user.email
     const existingUser = await User.findOne({email})
 
     if(!existingUser){

@@ -2,7 +2,7 @@ import User from "../database/mongo_schema.js";
 
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.userId).populate("raiseTicket");
+    const user = await User.findById(req.user.id).populate("raiseTicket");
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }

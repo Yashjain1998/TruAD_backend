@@ -1,4 +1,4 @@
-import User from "../database/mongo_schemar.js"
+import User from "../database/mongo_schema.js"
 import { generateRandomOTP } from "../utils/index.js"
 import OTP from "../database/mongo_schema_OTP.js"
 import nodemailer from "nodemailer";

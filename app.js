@@ -1,8 +1,5 @@
 import express from "express"
 import bodyParser from "body-parser"
-import Login from './controller/login.js';
-import Confirm from "./controller/confirm.js";
-import Register from './controller/register.js';
 import mongodb from './database/mongo.js'
 import cors from "cors"
 import fileUpload from 'express-fileupload';
@@ -14,6 +11,9 @@ import ivideoClip from "./controller/ivideoclip.js";
 import Media from "./database/mongo_schema_media.js";
 import mongoose from "mongoose";
 import VideoClip from "./controller/videoclip.js";
+import userRegister from "./routes/loginRegister.js";
+import User from "./routes/User_route.js"
+import raiseTicket from "./routes/RaiseTicket.js";
 
 
 
@@ -38,13 +38,8 @@ app.use(
 );
 
 app.use("/api", userRegister);
-
-app.use("/api/user", user);
-
-app.post('/api/login', Login);
-
-app.get('/api/confirm', Confirm);
-
+app.use('/api/user', User)
+app.use("/api/ticket", raiseTicket)
 app.post('/api/videoclip', VideoClip);
 
 app.post("/add-media", async (req, res) => {

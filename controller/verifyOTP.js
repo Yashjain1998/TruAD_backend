@@ -1,5 +1,5 @@
 import OTP from "../database/mongo_schema_OTP.js"
-import User from "../database/mongo_schemar.js"
+import User from "../database/mongo_schema.js"
 import jwt from 'jsonwebtoken'
 
 async function VerifyOTP(req, res){
@@ -26,7 +26,7 @@ async function VerifyOTP(req, res){
     
         const token = jwt.sign(
             { email},
-            process.env.SECRET,
+            process.env.JWT_SECRET,
             { expiresIn: "1h" }
           );
     
