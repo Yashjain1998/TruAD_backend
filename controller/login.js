@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt"
 import User from "../database/mongo_schemar.js"
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 async function Login(req, res) {
     try {
@@ -22,8 +25,10 @@ async function Login(req, res) {
         return res.status(403).json({message: "Email not verified"})
       }
   
-      const token = jwt.sign({ email, name: user.name }, 'secretkey', { expiresIn: '1h' });
-  
+      const token = jwt.sign({ email, name: user.name }, 'secret', { expiresIn: '1h' });
+      
+      console.log("1", token)
+      
       res.status(200).json({ token });
     } catch (error) {
       console.log(error);

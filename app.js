@@ -18,9 +18,9 @@ import mongoose from 'mongoose';
 import VideoClip from "./controller/videoclip.js";
 import ForgotPassword from "./controller/forgotPassword.js";
 import ResetPassword from "./controller/resetPassword.js";
-
-
-
+import UploadMaterial from "./controller/uploadMaterial.js"
+import Material from "./database/mongo_schema_material.js"
+import jwt from 'jsonwebtoken'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,6 +59,13 @@ app.post("/resetPassword", verifyToken, ResetPassword)
 
 app.post('/api/videoclip', VideoClip);
 
+app.post("/api/uploadMaterial", verifyToken, UploadMaterial)
+
+app.get("/api/getMaterial", async (req, res) => {
+    const materials = await Material.find();
+    res.status(200).json({materials})
+})
+
 app.post("/add-media", async(req, res) => {
     const data = JSON.parse(req.body.data);
     const file = req.files.video
@@ -92,7 +99,7 @@ app.post("/add-media", async(req, res) => {
 
     console.log("locations :", locations)
 
-    const id = new ObjectId(saveData.id)
+    const id = new ObjectId(saveData.id);
 
     const updated = await Media.findOneAndUpdate(
         { _id: id },
