@@ -2,8 +2,8 @@ import jwt from 'jsonwebtoken';
 
 const verifyToken = (req, res, next) => {
   // Get the token from the request headers
-  const token = req.headers['authorization'];
-
+  const bearerHeader = req.headers["authorization"];
+        const token = bearerHeader.split(" ")[1];
   // Check if token is not present
   if (!token) {
     return res.status(403).send({ message: 'A token is required for authentication' });
@@ -11,7 +11,7 @@ const verifyToken = (req, res, next) => {
 
   try {
     // Verify the token using the same secret used to sign it
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.SECRET);
     // Attach the user payload to the request object
     req.user = decoded;
   } catch (err) {
