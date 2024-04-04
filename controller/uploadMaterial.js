@@ -17,7 +17,7 @@ const UploadMaterial = async (req, res) => {
 
         const verifyToken = () => {
             return new Promise((resolve, reject) => {
-                jwt.verify(token, 'secretkey', (err, data) => {
+                jwt.verify(token, process.env.SECRET, (err, data) => {
                     if(err){
                         reject(err)
                     } else{
