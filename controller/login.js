@@ -25,7 +25,7 @@ async function Login(req, res) {
         return res.status(403).json({message: "Email not verified"})
       }
   
-      const token = jwt.sign({ email, name: user.name }, 'secret', { expiresIn: '1h' });
+      const token = jwt.sign({ email, name: user.name }, 'secretkey', { expiresIn: '1h' });
       
       console.log("1", token)
       

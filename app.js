@@ -21,6 +21,7 @@ import ResetPassword from "./controller/resetPassword.js";
 import UploadMaterial from "./controller/uploadMaterial.js"
 import Material from "./database/mongo_schema_material.js"
 import jwt from 'jsonwebtoken'
+import DeleteMaterial from "./controller/deleteMaterial.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -61,6 +62,8 @@ app.post('/api/videoclip', VideoClip);
 
 app.post("/api/uploadMaterial", verifyToken, UploadMaterial)
 
+
+app.post("/api/deleteMaterial", DeleteMaterial)
 app.get("/api/getMaterial", async (req, res) => {
     const materials = await Material.find();
     res.status(200).json({materials})
