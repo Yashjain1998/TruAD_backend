@@ -1,4 +1,4 @@
-import User from "../database/mongo_schema.js";
+import User from "../database/mongo_schemar.js";
 
 const getUserById = async (req, res) => {
   try {

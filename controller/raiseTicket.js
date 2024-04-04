@@ -1,4 +1,4 @@
-import User from '../database/mongo_schema.js';
+import User from '../database/mongo_schemar.js';
 import RaiseTicket from '../database/mongo_schema_raiseTicket.js';
 // Controller to get tickets for a user
 // Placeholder for UserTickets function
