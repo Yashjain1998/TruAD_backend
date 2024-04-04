@@ -18,10 +18,26 @@ const User = new Schema({
     type: String,
     required: false,
   },
+  raiseTicket: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'raiseTicket',
+      default: [],
+    },
+  ],
   isVerified: {
     type: Boolean,
     required: true,
   },
 });
+
+User.pre('remove', async function(next) {
+  const {raiseTicket} = this;
+  await RaiseTicket.deleteMany({
+    _id: { $in: raiseTicket }
+  });
+  next();
+});
+
 
 export default mongoose.model.user || mongoose.model("user", User);

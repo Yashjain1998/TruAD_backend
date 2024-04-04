@@ -22,6 +22,8 @@ import UploadMaterial from "./controller/uploadMaterial.js"
 import Material from "./database/mongo_schema_material.js"
 import jwt from 'jsonwebtoken'
 import DeleteMaterial from "./controller/deleteMaterial.js";
+import User from "./routes/User_route.js"
+import raiseTicket from "./routes/RaiseTicket.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,6 +48,8 @@ app.get("/", (req, res) => {
     res.send("Hello From Server")
 })
 
+app.use('/api/user', User)
+app.use("/api/ticket", raiseTicket)
 app.post('/api/register', Register);
 
 app.post('/api/login', Login);
