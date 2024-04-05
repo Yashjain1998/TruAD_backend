@@ -6,7 +6,7 @@ const createTickets = async (req, res) => {
   // Function implementation goes here
   try {
     // Check if the author exists
-    const user = await User.findOne({email:req.params.userId}).populate('raiseTicket');
+    const user = await User.findOne({email: req.params.user_email}).populate('raiseTicket');
     const{subject, status, supportTeam, viewImage}=req.body
     if (!user) {
       return res.status(404).json({ message: "Author not found" });
