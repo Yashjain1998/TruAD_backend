@@ -10,6 +10,7 @@ import cors from "cors"
 import fileUpload from 'express-fileupload';
 import path, { dirname } from 'path';
 import fs from 'fs';
+import Items from "./database/mongo-schema-items.js"
 import { fileURLToPath } from "url";
 import Video from "./database/mongo_schema_video.js"
 import ivideoClip from './controller/ivideoclip.js';
@@ -163,10 +164,14 @@ app.get("/media", async (req, res) => {
 })
 
 app.post("/get-clips", async (req, res) => {
+    try {
     const id = req.body.id;
-    const locations = await Video.find({media : id})
-
-    res.status(200).json({locations})
+    const parent = await Video.findOne({materialID : id})
+    const locations = await Items.find({parent: parent._id})
+    res.status(200).json({locations, parent})
+    } catch (error) {
+    console.log(error)    
+    }
 })
 
 

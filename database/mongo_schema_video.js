@@ -10,7 +10,7 @@ const Video=new Schema({
         type: String,
         required: true
     },
-    media: {
+    materialID: {
         type: String,
         required: true
     }
