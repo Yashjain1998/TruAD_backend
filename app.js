@@ -25,6 +25,8 @@ import jwt from 'jsonwebtoken'
 import DeleteMaterial from "./controller/deleteMaterial.js";
 import User from "./routes/User_route.js"
 import raiseTicket from "./routes/RaiseTicket.js"
+import { MongoClient } from 'mongodb';
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -164,15 +166,52 @@ app.get("/media", async (req, res) => {
 })
 
 app.post("/get-clips", async (req, res) => {
-    try {
+    // const mongoURI = 'mongodb://13.201.125.107:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.3';
+
+    // const client = new MongoClient(mongoURI);
+
+    // try {
+    //     await client.connect();
+
+    //     const db = client.db("test");
+    //     const videos = db.collection("videos");
+    //     const items = db.collection('items');
+
+    //     const id = req.body.id;
+
+    //     // Find the parent video based on materialID
+    //     const parent = await videos.findOne({ materialID: id });
+
+    //     if (!parent) {
+    //         return res.status(404).json({ message: "Parent video not found" });
+    //     }
+
+    //     // Find all clips with the same parent ID
+    //     const locationsCursor = items.find({ parent: parent._id });
+    //     const locations = await locationsCursor.toArray();
+
+    //     res.status(200).json({ locations, parent });
+    // } catch (error) {
+    //     console.error("Error fetching clips:", error);
+    //     res.status(500).json({ message: "Internal server error" });
+    // } finally {
+    //     await client.close();
+    // }
     const id = req.body.id;
-    const parent = await Video.findOne({materialID : id})
-    const locations = await Items.find({parent: parent._id})
-    res.status(200).json({locations, parent})
+
+    try {
+        const video = await Video.findOne({materialID : id})
+        if(!video){
+            return res.status(404)
+        }
+        const locations = await Items.find({parent: video._id})
+ 
+        res.status(200).json({locations})
     } catch (error) {
-    console.log(error)    
+        console.log(error)
     }
-})
+});
+
 
 
 export default app;
