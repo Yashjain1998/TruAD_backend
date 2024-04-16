@@ -212,7 +212,20 @@ app.post("/get-clips", async (req, res) => {
     }
 });
 
+app.get("/get-ids", async(req, res) => {
+    try {
+        const videos = await Video.find()
 
+        if(!videos){
+            return res.status(404).json({message: "Not found"})
+        }
+        const ids = videos.map((elem) => elem.materialID);
+
+        res.status(200).json({ids})
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 export default app;
 
