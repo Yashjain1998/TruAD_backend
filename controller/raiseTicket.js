@@ -54,7 +54,7 @@ const deleteTicketById = async (req, res) => {
 
 const getTicketsById= async (req, res)=>{
   try {
-    const Tickets = await RaiseTicket.findById(req.params.userId);
+    const Tickets = await RaiseTicket.findById(req.params.ticketId);
     if (!Tickets) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -107,5 +107,21 @@ const editTicketsById = async (req, res) => {
   }
 };
 
+const postreq= async (req, res)=>{
+  try {
+    const raiseTicket = new RaiseTicket({
+      subject: "abc",
+      viewImage: 'uytyesr',
+      userId:"660bcc757c37afb58a21c486",
+      // other book fields as needed
+    });
+    const ticket=await raiseTicket.save();
+    res.status(201).json(ticket)
+  } catch (error) {
+    console.error(error); // Log the error
+    res.status(500).json({ message: "Error adding book to author" });
+  }
+}
+
 // Correctly export both functions using named exports
-export {createTickets, getAllTickets, getTicketsById, editTicketsById, deleteTicketById};
+export {createTickets, getAllTickets, getTicketsById, editTicketsById, deleteTicketById, postreq};
