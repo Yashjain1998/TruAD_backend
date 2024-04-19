@@ -10,7 +10,7 @@ router.get("/all", getAllTickets)
 router.get("/:ticketId", getTicketsById)
 router.put("/edit/:ticketId", editTicketsById)
 router.post('/create',uploadfile, postreq)
-router.get("/image/:ticketId", sendImage)
+router.get("/photo/:ticketId", sendImage)
 
 
 export default router;

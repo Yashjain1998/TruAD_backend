@@ -130,16 +130,12 @@ const sendImage= async (req, res)=>{
     if (!Tickets) {
       return res.status(404).json({ message: "User not found" });
     }
-    // Sending just the array of tickets. Adjust if you need to include more user info.
-    return res.sendFile(Tickets.viewImage, (err) => {
+    res.sendFile(Tickets.viewImage, (err) => {
       if (err) {
           console.log(err);
           res.status(404).send("Sorry, we cannot find that file!");
       }
   });
-    // return res.status(200).json({
-    //   tickets: Tickets // Assuming raiseTicket is the correct field name
-    // });
   } catch (error) {
     console.error(error); // It's a good practice to log the actual error
     res.status(500).json({ message: "Error retrieving user tickets" });
