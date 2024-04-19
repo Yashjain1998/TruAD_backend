@@ -45,7 +45,3 @@ const upload = multer({ storage: storage });
 const uploadfile = upload.fields([{ name: 'blendFiles',  maxCount: 1}, { name: 'raiseticketimg',  maxCount: 1}]) 
 
 export default uploadfile
-
-
-
-// C:\Users\Admin\Desktop\TruAd\backend\TruAD_backend\uploads\other\1713514766663-tarcky.py
