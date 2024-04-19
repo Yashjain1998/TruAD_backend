@@ -7,7 +7,8 @@ const createTickets = async (req, res) => {
   try {
     // Check if the author exists
     const user = await User.findOne({email: req.params.user_email}).populate('raiseTicket');
-    const{subject, status, supportTeam, viewImage}=req.body
+    const{subject, status, supportTeam,}=req.body
+    const viewImage = req.file
     if (!user) {
       return res.status(404).json({ message: "Author not found" });
     }
@@ -123,5 +124,28 @@ const postreq= async (req, res)=>{
   }
 }
 
+const sendImage= async (req, res)=>{
+  try {
+    const Tickets = await RaiseTicket.findById(req.params.ticketId);
+    if (!Tickets) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    // Sending just the array of tickets. Adjust if you need to include more user info.
+    return res.sendFile(Tickets.viewImage, (err) => {
+      if (err) {
+          console.log(err);
+          res.status(404).send("Sorry, we cannot find that file!");
+      }
+  });
+    // return res.status(200).json({
+    //   tickets: Tickets // Assuming raiseTicket is the correct field name
+    // });
+  } catch (error) {
+    console.error(error); // It's a good practice to log the actual error
+    res.status(500).json({ message: "Error retrieving user tickets" });
+  }
+
+}
+
 // Correctly export both functions using named exports
-export {createTickets, getAllTickets, getTicketsById, editTicketsById, deleteTicketById, postreq};
+export {createTickets, getAllTickets, getTicketsById, editTicketsById, deleteTicketById, sendImage, postreq};
