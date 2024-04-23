@@ -7,7 +7,6 @@ import VerifyOTP from "./controller/verifyOTP.js";
 import verifyToken from "./middleware/verifyToken.js";
 import mongodb from './database/mongo.js'
 import cors from "cors"
-// import fileUpload from 'express-fileupload';
 import path, { dirname } from 'path';
 import fs from 'fs';
 import Items from "./database/mongo-schema-items.js"
@@ -39,14 +38,8 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
-mongodb();
+// mongodb();
 
-// app.use(
-//     fileUpload({
-//         useTempFiles: true,
-//         tempFileDir: '/video/'
-//     })
-// )
 
 app.get("/", (req, res) => {
     res.send("Hello From Server")
@@ -228,29 +221,21 @@ app.get("/get-ids", async(req, res) => {
     }
 })
 
-// app.post('/upload', 
-// upload,
-// (req, res) => {
-//     try{
-//         let filePath = req.file;
-//         filePath= filePath.split("").map(el=>{
-//             if(el.charCodeAt(0)===92){
-//                 return '/'
-//             }else{
-//                 return el
-//             }
-//         }).join("")
-//         console.log('File path:', filePath);
-//     if (!req.files || req.files.length === 0) {
-//         return res.status(400).send('No files were uploaded.');
-//     } else {
-//         // Provide a more informative message upon successful upload
-//         return res.status(200).send(`Files have been successfully uploaded=${filePath}`);
-//     }
-//     }catch(error){
-//         console.log("error=>",error)
-//     }
-// });
+app.post('/upload', 
+upload,
+(req, res) => {
+    try{
+        let filePath = req.file;
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    } else {
+        // Provide a more informative message upon successful upload
+        return res.status(200).send(`Files have been successfully uploaded=${filePath}`);
+    }
+    }catch(error){
+        console.log("error=>",error)
+    }
+});
 
 // app.get('/image/', (req, res) => {
 //     console.log(req)

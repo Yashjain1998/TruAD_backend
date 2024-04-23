@@ -18,7 +18,7 @@ const storage = multer.diskStorage({
         dir = path.join(__dirname, "../uploads/raiseticket-image/");
         break;
       default:
-        dir = path.join(__dirname, "../uploads/other"); // default directory
+        dir = path.join(__dirname, "../uploads/other/"); // default directory
         break;
     }
     fs.access(dir, fs.constants.F_OK, (err) => {
@@ -50,9 +50,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-const uploadfile = upload.fields([
-  { name: "blendFiles", maxCount: 1 },
-  { name: "raiseticketimg", maxCount: 1 },
-]);
+const uploadfile = upload.any()
+//  upload.fields([
+//   { name: "blendFiles", maxCount: 1 },
+//   { name: "raiseticketimg", maxCount: 1 },
+// ]);
 
 export default uploadfile;
