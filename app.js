@@ -38,7 +38,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
-// mongodb();
+mongodb();
 
 
 app.get("/", (req, res) => {
