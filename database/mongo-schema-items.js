@@ -13,6 +13,14 @@ const itemSchema = mongoose.Schema({
     location:{
         type: String,
         required: true
+    },
+    blend: {
+        type: Boolean,
+        default: false
+    },
+    blendFile: {
+        type: String,
+        required: false
     }
 })
 
