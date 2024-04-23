@@ -7,7 +7,8 @@ const createTickets = async (req, res) => {
   try {
     // Check if the author exists
     const user = await User.findOne({email: req.params.user_email}).populate('raiseTicket');
-    const{subject, status, supportTeam, viewImage}=req.body
+    const{subject, status, supportTeam,}=req.body
+    const viewImage = req.file
     if (!user) {
       return res.status(404).json({ message: "Author not found" });
     }
@@ -54,7 +55,7 @@ const deleteTicketById = async (req, res) => {
 
 const getTicketsById= async (req, res)=>{
   try {
-    const Tickets = await RaiseTicket.findById(req.params.userId);
+    const Tickets = await RaiseTicket.findById(req.params.ticketId);
     if (!Tickets) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -107,5 +108,40 @@ const editTicketsById = async (req, res) => {
   }
 };
 
+const postreq= async (req, res)=>{
+  try {
+    const raiseTicket = new RaiseTicket({
+      subject: "abc",
+      viewImage: 'uytyesr',
+      userId:"660bcc757c37afb58a21c486",
+      // other book fields as needed
+    });
+    const ticket=await raiseTicket.save();
+    res.status(201).json(ticket)
+  } catch (error) {
+    console.error(error); // Log the error
+    res.status(500).json({ message: "Error adding book to author" });
+  }
+}
+
+const sendImage= async (req, res)=>{
+  try {
+    const Tickets = await RaiseTicket.findById(req.params.ticketId);
+    if (!Tickets) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.sendFile(Tickets.viewImage, (err) => {
+      if (err) {
+          console.log(err);
+          res.status(404).send("Sorry, we cannot find that file!");
+      }
+  });
+  } catch (error) {
+    console.error(error); // It's a good practice to log the actual error
+    res.status(500).json({ message: "Error retrieving user tickets" });
+  }
+
+}
+
 // Correctly export both functions using named exports
-export {createTickets, getAllTickets, getTicketsById, editTicketsById, deleteTicketById};
+export {createTickets, getAllTickets, getTicketsById, editTicketsById, deleteTicketById, sendImage, postreq};

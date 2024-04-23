@@ -7,7 +7,6 @@ import VerifyOTP from "./controller/verifyOTP.js";
 import verifyToken from "./middleware/verifyToken.js";
 import mongodb from './database/mongo.js'
 import cors from "cors"
-import fileUpload from 'express-fileupload';
 import path, { dirname } from 'path';
 import fs from 'fs';
 import Items from "./database/mongo-schema-items.js"
@@ -27,6 +26,8 @@ import User from "./routes/User_route.js"
 import raiseTicket from "./routes/RaiseTicket.js"
 import { MongoClient } from 'mongodb';
 import GetMaterial from "./controller/getMaterial.js";
+import upload from "./middleware/fileupload.js";
+
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,12 +42,6 @@ app.use(bodyParser.json());
 app.use(cors());
 mongodb();
 
-app.use(
-    fileUpload({
-        useTempFiles: true,
-        tempFileDir: '/video/'
-    })
-)
 
 app.get("/", (req, res) => {
     res.send("Hello From Server")
@@ -273,6 +268,36 @@ app.get("/add-be", async(req, res) => {
         res.status(500).json({message: "Internal Server Error"})
     }
 })
+
+app.post('/upload', 
+upload,
+(req, res) => {
+    try{
+        let filePath = req.file;
+    if (!req.files || req.files.length === 0) {
+        return res.status(400).send('No files were uploaded.');
+    } else {
+        // Provide a more informative message upon successful upload
+        return res.status(200).send(`Files have been successfully uploaded=${filePath}`);
+    }
+    }catch(error){
+        console.log("error=>",error)
+    }
+});
+
+// app.get('/image/', (req, res) => {
+//     console.log(req)
+//     // const filename = req.params.filename;
+//     // const filePath = path.join(filename);
+
+//     // Send the image file to the client
+//     res.sendFile("C:/Users/Admin/Desktop/TruAd/backend/TruAD_backend/uploads/blendFiles/1713520209545-dog.jpg", (err) => {
+//         if (err) {
+//             console.log(err);
+//             res.status(404).send("Sorry, we cannot find that file!");
+//         }
+//     });
+// });
 
 export default app;
 

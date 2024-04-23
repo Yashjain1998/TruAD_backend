@@ -6,7 +6,7 @@ function mongodb() {
   
   const mongoURI = `mongodb+srv://blogChefUser:${process.env.MONGO_KEY}@cluster0.pq0gbfi.mongodb.net/?retryWrites=true&w=majority`;
 
-  // const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_KEY}@cluster0.pq0gbfi.mongodb.net/?retryWrites=true&w=majority`;
+  // const mongoURI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_KEY}@cluster0.duvmrrh.mongodb.net/`;
   mongoose
     .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
