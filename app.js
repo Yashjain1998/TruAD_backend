@@ -25,7 +25,9 @@ import DeleteMaterial from "./controller/deleteMaterial.js";
 import User from "./routes/User_route.js"
 import raiseTicket from "./routes/RaiseTicket.js"
 import { MongoClient } from 'mongodb';
+import GetMaterial from "./controller/getMaterial.js";
 import upload from "./middleware/fileupload.js";
+
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -65,10 +67,7 @@ app.post("/api/uploadMaterial", verifyToken, UploadMaterial)
 
 
 app.post("/api/deleteMaterial", DeleteMaterial)
-app.get("/api/getMaterial", async (req, res) => {
-    const materials = await Material.find();
-    res.status(200).json({materials})
-})
+app.get("/api/getMaterial", GetMaterial)
 
 app.post("/add-media", async(req, res) => {
     const data = JSON.parse(req.body.data);
@@ -220,6 +219,55 @@ app.get("/get-ids", async(req, res) => {
         res.status(200).json({ids})
     } catch (error) {
         console.log(error)
+    }
+})
+
+app.post("/blend-clip", async(req, res) => {
+    const itemID = req.body.id;
+
+    try {
+        const existingItem = await Items.findOne({_id: itemID})
+        if(!existingItem){
+            return res.status(404).json({message: "Item does not exist"})
+        }
+
+        existingItem.blend = true;
+        await existingItem.save()
+
+        res.status(200).json({messgae: "Success"})
+    } catch (error) {
+        res.status(500).json({message: "Internal Server Error"})
+        console.log(error)
+    }
+})
+
+app.get("/edits", async (req, res) => {
+    try {
+        const clips = await Items.find({blend: true})
+        if(!clips){
+            return res.status(404).json({message: "Not found"})
+        }
+
+        res.status(200).json({clips})
+    } catch (error) {
+        res.status(500).json({message: "Internal Server Error"})
+        console.log(error)
+    }
+})
+
+app.get("/add-be", async(req, res) => {
+    try {
+        const newItem = new Items({
+            name : '/home/vboxuser/Downloads/videoAD3/upload/popat_splits/split_video_10.mp4',
+            parent: '66226c4708b8eb7da84bdba2',
+            location : 'https://videotruad.s3.ap-south-1.amazonaws.com/split_video_10.mp4'
+        })
+    
+        await newItem.save();
+        res.status(200).send("Successsss")
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({message: "Internal Server Error"})
     }
 })
 
