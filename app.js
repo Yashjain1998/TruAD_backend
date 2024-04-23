@@ -38,7 +38,7 @@ const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 app.use(cors());
-mongodb();
+// mongodb();
 
 
 app.get("/", (req, res) => {
@@ -116,8 +116,10 @@ app.post("/add-media", async(req, res) => {
     res.status(200).json({location : vidData.locations, saveData: updated})
 })
 
+// api for video 
 app.get('/video',(req,res)=>{
-    const videoPath = path.join(__dirname, 'video', 'net.mp4');
+    // const videoPath = path.join(__dirname, 'video', 'net.mp4');
+    const videoPath = "C:\\Users\\Admin\\Desktop\\TruAd\\backend\\TruAD_backend\\uploads\\blendFiles\\1713852780655-production_id_3830513 (1080p).mp4"
     const stat = fs.statSync(videoPath);
     const fileSize = stat.size;
     const range = req.headers.range;
@@ -237,19 +239,21 @@ upload,
     }
 });
 
-// app.get('/image/', (req, res) => {
-//     console.log(req)
-//     // const filename = req.params.filename;
-//     // const filePath = path.join(filename);
+// api for video and image
+app.get('/image/', (req, res) => {
+    console.log(req)
+    // const filename = req.params.filename;
+    // const filePath = path.join(filename);
 
-//     // Send the image file to the client
-//     res.sendFile("C:/Users/Admin/Desktop/TruAd/backend/TruAD_backend/uploads/blendFiles/1713520209545-dog.jpg", (err) => {
-//         if (err) {
-//             console.log(err);
-//             res.status(404).send("Sorry, we cannot find that file!");
-//         }
-//     });
-// });
+    // Send the image file to the client
+    const file="C:\\Users\\Admin\\Desktop\\TruAd\\backend\\TruAD_backend\\uploads\\blendFiles\\1713852780655-production_id_3830513 (1080p).mp4"
+    res.sendFile(file, (err) => {
+        if (err) {
+            console.log(err);
+            res.status(404).send("Sorry, we cannot find that file!");
+        }
+    });
+});
 
 export default app;
 
