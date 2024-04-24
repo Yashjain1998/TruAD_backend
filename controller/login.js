@@ -29,7 +29,7 @@ async function Login(req, res) {
       
       console.log("1", token)
       
-      res.status(200).json({ token });
+      res.status(200).json({ token, username: user.name, email: user.email });
     } catch (error) {
       console.log(error);
       res.status(500).send('Error logging in user');
