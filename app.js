@@ -38,7 +38,7 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors());
-// mongodb();
+mongodb();
 
 app.get("/", (req, res) => {
   res.send("Hello From Server");
@@ -265,8 +265,9 @@ app.get("/add-be", async (req, res) => {
   }
 });
 
-app.put("/upload:clipId", upload, async (req, res) => {
+app.put("/upload/:clipId", upload, async (req, res) => {
   try {
+    console.log(req);
     let filePath = req.file;
     const id=req.params.clipId
     const existingItem = await Items.findById(id);
