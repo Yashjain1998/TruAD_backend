@@ -148,10 +148,30 @@ app.get("/get-video", async (req, res) => {
 });
 
 app.get("/media", async (req, res) => {
+try {
   const data = await Media.find().sort({ createdAt: -1 });
 
   res.status(200).json({ data });
+} catch (error) {
+  console.log(error)
+  res.status(500).json({message: "Internal Server Error"})
+}
 });
+
+app.get('/allItems', async(req, res) => {
+  try {
+    const items = await Items.find()
+    if(!items){
+      return res.status(404).json({message: "No clips found"})
+    }
+  
+    res.status(200).json({items})
+  
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({message: "Internal Server Error"})    
+  }
+})
 
 app.post("/get-existingItem", async (req, res) => {
   // const mongoURI = 'mongodb://13.201.125.107:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.3';
