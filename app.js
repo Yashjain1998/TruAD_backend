@@ -299,6 +299,7 @@ app.get("/add-be", async (req, res) => {
   }
 });
 
+// <<<<<<< HEAD
 app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
   // try {
   //   let filePath = req.file;
@@ -323,6 +324,34 @@ app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
   //   console.log("error=>", error);
   //   res.status(500).json({ message: "Server error", error: error.message });
   // }
+// =======
+// app.put("/upload/:clipId", upload, async (req, res) => {
+//   try {
+//     console.log(req);
+//     let filePath = req.file;
+//     const id=req.params.clipId
+//     const existingItem = await Items.findById(id);
+//     if (!existingItem) {
+//       return res.status(404).json({ message: "Not found" });
+//     } else if (!req.files || req.files.length === 0) {
+//       return res.status(404).json({ message: "Item does not exist" });
+//     } else {
+//       // Provide a more informative message upon successful upload
+//       existingItem.blendFile = filePath;
+//     await existingItem.save();
+//       return res
+//         .status(200)
+//         .json({
+//             message: "File has been successfully uploaded",
+//             item: existingItem
+//           });
+//     }
+//   } catch (error) {
+//     console.log("error=>", error);
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// });
+// >>>>>>> 18b9dfcc9a4de725dde9383e997548ca58e17e42
 
     try {
       const id = req.params.clipId; // Access request parameters using dot notation
