@@ -27,12 +27,26 @@ import raiseTicket from "./routes/RaiseTicket.js";
 import { MongoClient } from "mongodb";
 import GetMaterial from "./controller/getMaterial.js";
 import upload from "./middleware/fileupload.js";
+import aws from "aws-sdk"
+import multer from 'multer';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 console.log(__dirname);
 
 const ObjectId = mongoose.Types.ObjectId;
+
+aws.config.update({
+  accessKeyId: process.env.ACCESS_KEY,
+  secretAccessKey: process.env.ACCESS_SECRET,
+  region: process.env.REGION
+})
+
+const s3 = new aws.S3()
+
+
+const storage = multer.memoryStorage();
+const uploader = multer({ storage: storage });
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -285,32 +299,69 @@ app.get("/add-be", async (req, res) => {
   }
 });
 
-app.put("/upload:clipId", upload, async (req, res) => {
-  try {
-    let filePath = req.file;
-    const id=req.params.clipId
-    const existingItem = await Items.findById(id);
-    if (!existingItem) {
-      return res.status(404).json({ message: "Not found" });
-    } else if (!req.files || req.files.length === 0) {
-      return res.status(404).json({ message: "Item does not exist" });
-    } else {
-      // Provide a more informative message upon successful upload
-      existingItem.blendFile = filePath;
-    await existingItem.save();
-      return res
-        .status(200)
-        .json({
-            message: "File has been successfully uploaded",
-            item: existingItem
-          });
-    }
-  } catch (error) {
-    console.log("error=>", error);
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-});
+app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
+  // try {
+  //   let filePath = req.file;
+  //   const id=req.params.clipId
+  //   const existingItem = await Items.findById(id);
+  //   if (!existingItem) {
+  //     return res.status(404).json({ message: "Not found" });
+  //   } else if (!req.files || req.files.length === 0) {
+  //     return res.status(404).json({ message: "Item does not exist" });
+  //   } else {
+  //     // Provide a more informative message upon successful upload
+  //     existingItem.blendFile = filePath;
+  //   await existingItem.save();
+  //     return res
+  //       .status(200)
+  //       .json({
+  //           message: "File has been successfully uploaded",
+  //           item: existingItem
+  //         });
+  //   }
+  // } catch (error) {
+  //   console.log("error=>", error);
+  //   res.status(500).json({ message: "Server error", error: error.message });
+  // }
 
+    try {
+      const id = req.params.clipId; // Access request parameters using dot notation
+      const file = req.file;
+      const existingItem = await Items.findOne({ _id: id }).exec(); // Use .exec() to return a promise
+  
+      if (!existingItem) {
+        return res.status(404).json({ message: "Item not found" });
+      }
+  
+      const params = {
+        Bucket: process.env.BUCKET,
+        Key: req.file.originalname,
+        Body: req.file.buffer
+      };
+  
+      s3.upload(params, async (err, data) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send("Error uploading file");
+        }
+  
+        console.log(data);
+        existingItem.blendFile = data.Location;
+  
+        try {
+          await existingItem.save(); // Use await with save to ensure it completes before sending response
+          res.json({ message: "Direct message and file details stored." });
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ message: "Error saving item" });
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Server error" });
+    }
+  });
+  
 // api for video and image
 app.get("/image/", (req, res) => {
   console.log(req);
