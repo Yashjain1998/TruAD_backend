@@ -157,7 +157,7 @@ app.get("/video", (req, res) => {
 });
 
 app.get("/get-video", async (req, res) => {
-  const data = await Video.find();
+  const data = await Items.find({ blendFile: { $exists: true, $ne: null } });
   res.status(200).json({ data });
 });
 
@@ -286,7 +286,7 @@ app.get("/add-be", async (req, res) => {
   try {
     const newItem = new Items({
       name: "/home/vboxuser/Downloads/videoAD3/upload/popat_splits/split_video_10.mp4",
-      parent: "66226c4708b8eb7da84bdba2",
+      parent: "6638c56ee1c72c513e6fdbbb",
       location:
         "https://videotruad.s3.ap-south-1.amazonaws.com/split_video_10.mp4",
     });
