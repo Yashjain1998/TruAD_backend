@@ -299,6 +299,25 @@ app.get("/add-be", async (req, res) => {
   }
 });
 
+app.post("/remove-blend", async(req, res) => {
+  const {itemID} = req.body
+  console.log(itemID)
+  try {
+
+    const updated = await Items.findOneAndUpdate(
+      { _id: itemID }, // Filter criteria to identify the document
+      { $unset: { blendFile: "" } } // Remove the `blendFile` property
+    )
+
+    res.status(200).json({message: "BlendFile Removed Successfully"})
+
+    console.log('updated', updated)
+  } catch (error) {
+    res.status(500).json({message: "Internal Server Error"})
+    console.log(error)
+  }
+})
+
 // <<<<<<< HEAD
 app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
   // try {
