@@ -15,6 +15,7 @@ import Video from "./database/mongo_schema_video.js";
 import ivideoClip from "./controller/ivideoclip.js";
 import Media from "./database/mongo_schema_media.js";
 import Notification from "./database/mongo_schema_notification.js"
+import Band from "./database/mongo_schema_band.js"
 import mongoose from "mongoose";
 import VideoClip from "./controller/videoclip.js";
 import ForgotPassword from "./controller/forgotPassword.js";
@@ -324,6 +325,54 @@ app.get("/notifications", async(req, res) => {
     const notifications = await Notification.find();
     res.status(200).json({notifications})
   } catch (error) {
+    res.status(500).json({message: "Internal Server Error"})
+  }
+})
+
+app.get("/band", async(req, res) => {
+  try {
+    const bands = await Band.find();
+    if(!bands){
+      return res.status(404).json({message: "No bands found"})
+    }
+
+    return res.status(200).json({message: "Bands found", bands})
+  } catch (error) {
+    return res.status(500).json({message: "Internal Server Error"})
+  }
+})
+
+app.post("/band", uploader.single("band"), async(req, res) => {
+  try {
+    const file = req.file;
+  
+    const params = {
+      Bucket: process.env.BUCKET,
+      Key: req.file.originalname,
+      Body: req.file.buffer
+    };
+
+    s3.upload(params, async (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("Error uploading file");
+      }
+
+      console.log(data);
+      const newBand = new Band({
+        name: file.originalname,
+        location: data.Location
+      })
+      try {
+        await newBand.save();
+        res.json({ message: "Direct message and file details stored." });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error saving item" });
+      }
+    });
+  } catch (error) {
+    console.log(error)
     res.status(500).json({message: "Internal Server Error"})
   }
 })
