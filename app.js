@@ -342,14 +342,23 @@ app.get("/band", async(req, res) => {
   }
 })
 
-app.post("/band", uploader.single("band"), async(req, res) => {
+app.post("/band", uploader.single("band"), async (req, res) => {
   try {
     const file = req.file;
-  
+    const name = req.body.name;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    if (!name) {
+      return res.status(400).json({ message: "No name provided" });
+    }
+
     const params = {
       Bucket: process.env.BUCKET,
-      Key: req.file.originalname,
-      Body: req.file.buffer
+      Key: file.originalname,
+      Body: file.buffer
     };
 
     s3.upload(params, async (err, data) => {
@@ -360,9 +369,10 @@ app.post("/band", uploader.single("band"), async(req, res) => {
 
       console.log(data);
       const newBand = new Band({
-        name: file.originalname,
+        name: name, // Use the name from req.body
         location: data.Location
-      })
+      });
+
       try {
         await newBand.save();
         res.json({ message: "Direct message and file details stored." });
@@ -372,10 +382,10 @@ app.post("/band", uploader.single("band"), async(req, res) => {
       }
     });
   } catch (error) {
-    console.log(error)
-    res.status(500).json({message: "Internal Server Error"})
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
-})
+});
 
 // <<<<<<< HEAD
 app.put("/upload/:clipId", uploader.single('blendFiles'), async (req, res) => {
