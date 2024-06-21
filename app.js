@@ -14,6 +14,8 @@ import { fileURLToPath } from "url";
 import Video from "./database/mongo_schema_video.js";
 import ivideoClip from "./controller/ivideoclip.js";
 import Media from "./database/mongo_schema_media.js";
+import Notification from "./database/mongo_schema_notification.js"
+import Band from "./database/mongo_schema_band.js"
 import mongoose from "mongoose";
 import VideoClip from "./controller/videoclip.js";
 import ForgotPassword from "./controller/forgotPassword.js";
@@ -319,8 +321,75 @@ app.post("/remove-blend", async(req, res) => {
   }
 })
 
+app.get("/notifications", async(req, res) => {
+  try {
+    const notifications = await Notification.find();
+    res.status(200).json({notifications})
+  } catch (error) {
+    res.status(500).json({message: "Internal Server Error"})
+  }
+})
+
+app.get("/band", async(req, res) => {
+  try {
+    const bands = await Band.find();
+    if(!bands){
+      return res.status(404).json({message: "No bands found"})
+    }
+
+    return res.status(200).json({message: "Bands found", bands})
+  } catch (error) {
+    return res.status(500).json({message: "Internal Server Error"})
+  }
+})
+
+app.post("/band", uploader.single("band"), async (req, res) => {
+  try {
+    const file = req.file;
+    const name = req.body.name;
+
+    if (!file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    if (!name) {
+      return res.status(400).json({ message: "No name provided" });
+    }
+
+    const params = {
+      Bucket: process.env.BUCKET,
+      Key: file.originalname,
+      Body: file.buffer
+    };
+
+    s3.upload(params, async (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send("Error uploading file");
+      }
+
+      console.log(data);
+      const newBand = new Band({
+        name: name, // Use the name from req.body
+        location: data.Location
+      });
+
+      try {
+        await newBand.save();
+        res.json({ message: "Direct message and file details stored." });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Error saving item" });
+      }
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+});
+
 // <<<<<<< HEAD
-app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
+app.put("/upload/:clipId", uploader.single('blendFiles'), async (req, res) => {
   // try {
   //   let filePath = req.file;
   //   const id=req.params.clipId
@@ -372,7 +441,7 @@ app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
 //   }
 // });
 // >>>>>>> 18b9dfcc9a4de725dde9383e997548ca58e17e42
-
+  console.log("hit")
     try {
       const id = req.params.clipId; // Access request parameters using dot notation
       const file = req.file;
@@ -387,6 +456,11 @@ app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
         Key: req.file.originalname,
         Body: req.file.buffer
       };
+
+      const newNotif = new Notification({
+        title: `${existingItem.name.split("videoAD3/upload/")[1]} Processed`,
+        clip: existingItem._id
+      })
   
       s3.upload(params, async (err, data) => {
         if (err) {
@@ -398,7 +472,8 @@ app.put("/upload/:clipId", uploader.single('file'), async (req, res) => {
         existingItem.blendFile = data.Location;
   
         try {
-          await existingItem.save(); // Use await with save to ensure it completes before sending response
+          await existingItem.save();
+          await newNotif.save() // Use await with save to ensure it completes before sending response
           res.json({ message: "Direct message and file details stored." });
         } catch (error) {
           console.error(error);
