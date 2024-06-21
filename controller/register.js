@@ -32,6 +32,7 @@ let transporter = nodemailer.createTransport({
 });
 
 async function Register(req, res) {
+  console.log("hit")
   try {
     const { name, password, email } = req.body;
 
